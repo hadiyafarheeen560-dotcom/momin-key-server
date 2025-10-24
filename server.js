@@ -1,36 +1,26 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const port = 3000;
+const express = require("express");
+const cors = require("cors");
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-// === Sample Keys Database ===
-let keysDB = {
-    "HadiyaFarheen": { device: null },
-    "Naziya": { device: null },
-    "Saima": { device: null }
-};
+const PORT = process.env.PORT || 3000;
 
-// === Validate Key API ===
-app.get('/validate-key', (req, res) => {
-    const key = req.query.key;
-    const deviceID = req.query.device; // frontend se deviceID bhejna
+// ✅ Sirf ye keys valid hain
+const VALID_KEYS = [
+  "ETE","PA8","216","DHA","DIY","AFA","RHE","EEN","TAQ","UIT","UFA","ILM"
+];
 
-    if (!key) return res.json({ valid: false, message: "Key required" });
+app.get("/validate-key", (req, res) => {
+    const { key } = req.query;
+    if (!key) return res.json({ valid: false });
 
-    if (!keysDB[key]) return res.json({ valid: false });
-
-    // Agar key already assigned to kisi device
-    if (keysDB[key].device && keysDB[key].device !== deviceID) {
-        return res.json({ valid: true, device: keysDB[key].device });
+    if (VALID_KEYS.includes(key)) {
+        return res.json({ valid: true });
+    } else {
+        return res.json({ valid: false });
     }
-
-    // Assign device if not already assigned
-    keysDB[key].device = deviceID;
-    res.json({ valid: true, device: deviceID });
 });
 
-// === Start server ===
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
