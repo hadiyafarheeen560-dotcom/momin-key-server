@@ -7,7 +7,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-// ✅ Sirf ye keys valid hain
 const VALID_KEYS = [
   "ETE","PA8","216","DHA","DIY","AFA","RHE","EEN","TAQ","UIT","UFA","ILM"
 ];
